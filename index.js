@@ -18,17 +18,16 @@ const app = express();
 // Iniciamos los CORS
 app.use(cors());
 
+// Lectura y Parseo del Body (por ejemplo datos enviados desde Postman)
+app.use(express.json());
+
 // Llamamos al Método de Conexión a la BD
 dbConnection();
 
 // Creamos las Rutas
-app.get('/', (req, res) => {
-
-    res.json({
-        ok: true,
-        msg: 'Hola Mundo'
-    });
-});
+app.use('/', require('./routes/pruebaServer'));
+app.use('/api/usuarios', require('./routes/usuarios'));
+app.use('/api/login', require('./routes/auth'));
 
 // Levantamos el Servidor en el puerto definido en las Variables de Entorno
 app.listen(process.env.PORT, () => {

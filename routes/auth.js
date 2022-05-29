@@ -20,7 +20,11 @@ const router = Router();
 
 // Ruta POST para Loguear Usuarios
 router.post('/', [
+
+        // validamos el email no esté vacío y que tenga formato email
         check('email', 'El email es obligatorio').isEmail(),
+
+        // validamos que el password no esté vacío
         check('password', 'La contraseña es obligatoria').notEmpty(),
 
         // Validamos según nuestras validaciones personalizadas

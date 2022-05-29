@@ -31,8 +31,14 @@ router.get('/', [
 
 // Ruta POST para Crear Usuarios (Validaciones con Express Validator)
 router.post('/', [
+
+        // validamos que el nombre no esté vacío
         check('nombre', 'El nombre es obligatorio').notEmpty(),
+
+        // validamos que el password no esté vacío
         check('password', 'La contraseña es obligatoria').notEmpty(),
+
+        // validamos que el email no esté vacío y tenga formato de email
         check('email', 'El email es obligatorio').isEmail(),
 
         // Validamos según nuestras validaciones personalizadas
@@ -44,8 +50,14 @@ router.post('/', [
 
 // Ruta PUT para Modificar Usuarios (necesita el id)
 router.put('/:id', [
+
+        // validamos que el nombre no esté vacío
         check('nombre', 'El nombre es obligatorio').notEmpty(),
+
+        // validamos que el email no esté vacío y tenga formato de email
         check('email', 'El email es obligatorio').isEmail(),
+
+        // validamos que el role no esté vacío
         check('role', 'El role es obligatorio').notEmpty(),
 
         // Validamos según nuestras validaciones personalizadas

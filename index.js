@@ -24,10 +24,14 @@ app.use(express.json());
 // Llamamos al Método de Conexión a la BD
 dbConnection();
 
-// Creamos las Rutas
+// Llamamos a las Rutas
 app.use('/', require('./routes/pruebaServer'));
 app.use('/api/usuarios', require('./routes/usuarios'));
 app.use('/api/login', require('./routes/auth'));
+app.use('/api/hospitales', require('./routes/hospitales'));
+app.use('/api/medicos', require('./routes/medicos'));
+app.use('/api/todo', require('./routes/busquedas'));
+app.use('/api/uploads', require('./routes/uploads'));
 
 // Levantamos el Servidor en el puerto definido en las Variables de Entorno
 app.listen(process.env.PORT, () => {

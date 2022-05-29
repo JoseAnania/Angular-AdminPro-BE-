@@ -1,4 +1,4 @@
-// Archivo creado para el Modelo de BD (Mongoose) de Usuarios
+/* Archivo creado para el Modelo de BD (Mongoose) de Usuarios */
 
 // Importamos Mongoose
 const { Schema, model } = require('mongoose');

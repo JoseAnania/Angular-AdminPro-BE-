@@ -11,14 +11,29 @@ const { generarJWT } = require("../helpers/jwt");
 
 // Método GET
 const getUsuario = async(req, res) => {
-    // buscamos la lista de Usuarios de la BD (await porque es una Promesa y esperamos a que termine antes de ejecutar la res)
-    // en el find definimos sólo lo que queremos que nos muestre
-    const usuarios = await Usuario.find({}, "nombre email role google");
+
+    // creamos una constante numérica para la paginación
+    const desde = Number(req.query.desde) || 0;
+
+    // como ejecutaremos dos promesas consecutivas podemos usar el siguiente método (para las promesas "usuarios" y "total")
+    const [usuarios, total] = await Promise.all([
+
+        // buscamos la lista de Usuarios de la BD 
+        // en el Find definimos sólo lo que queremos que nos muestre, en el Skip la paginación y el Limit el valor hasta del Skip
+        Usuario
+        .find({}, "nombre email role google img")
+        .skip(desde)
+        .limit(5),
+
+        // calculamos el total de registros en BD para mostrarlos en la respuesta
+        Usuario.countDocuments(),
+    ]);
 
     // respuesta
     res.json({
         ok: true,
         usuarios,
+        total,
     });
 };
 

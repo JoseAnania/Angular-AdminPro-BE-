@@ -24,6 +24,9 @@ app.use(express.json());
 // Llamamos al Método de Conexión a la BD
 dbConnection();
 
+// Permitimos el acceso al directorio Público (Demo para probar el SignIn de Google)
+app.use(express.static('public'));
+
 // Llamamos a las Rutas
 app.use('/', require('./routes/pruebaServer'));
 app.use('/api/usuarios', require('./routes/usuarios'));

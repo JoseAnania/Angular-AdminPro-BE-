@@ -7,7 +7,7 @@
 const { Router } = require('express');
 
 // Importamos los Controladores
-const { login } = require('../controllers/auth');
+const { login, googleSignIn } = require('../controllers/auth');
 
 // Importamos las Validaciones
 const { validarCampos } = require('../middlewares/validar-campos');
@@ -32,6 +32,19 @@ router.post('/', [
     ],
 
     login
+);
+
+// Ruta POST para Loguear con Google
+router.post('/google', [
+
+        // validamos que el token no esté vacío
+        check('token', 'El Token de Google es obligatorio').notEmpty(),
+
+        // Validamos según nuestras validaciones personalizadas
+        validarCampos,
+    ],
+
+    googleSignIn
 );
 
 // Exportamos la Ruta

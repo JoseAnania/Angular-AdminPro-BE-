@@ -1,0 +1,82 @@
+<!--HTML creado para probar la funcionalidad de Google SignIn-->
+<!--(ACTUALIZADO SEGUN MIGRACIÓN: AHORA LA AUTENTICACIÓN SE REALIZA DESDE "https://developers.google.com/identity/gsi/web/guides/migration")-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Login</title>
+
+    <!--Cargamos el Id de Cliente Google según doc de Integrating Google Sign In-->
+    <!--<meta name="google-signin-client_id" content="238620353767-qmgnt39jenirn41p340kfnvu6vsfbd6a.apps.googleusercontent.com">-->
+    <div id="g_id_onload" data-client_id="238620353767-qmgnt39jenirn41p340kfnvu6vsfbd6a.apps.googleusercontent.com" data-callback="handleCredentialResponse">
+    </div>
+
+</head>
+
+<body>
+    <h1>Google SignIn</h1>
+
+    <!--Botón de Inicio de Sesión según doc de Integrating Google Sign In-->
+    <!--<div class="g-signin2" data-onsuccess="onSignIn"></div>-->
+    <div class="g_id_signin" data-type="standard"></div>
+
+    <!--Cargamos la librería de Google según doc de Integrating Google Sign In-->
+    <!--<script src="https://apis.google.com/js/platform.js" async defer></script>-->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!--Creamos un Script para obtener la info del perfil según doc de Integrating Google Sign In-->
+    <!--<script>
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+        }
+    </script>-->
+    <script>
+        function decodeJwtResponse(token) {
+            let base64Url = token.split('.')[1]
+            let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload)
+        }
+
+        let responsePayload;
+
+        function handleCredentialResponse(response, require) {
+            // decodeJwtResponse() is a custom function defined by you
+            // to decode the credential response.
+            responsePayload = decodeJwtResponse(response.credential);
+            console.log("ID: " + responsePayload.sub);
+            console.log('Full Name: ' + responsePayload.name);
+            console.log("Image URL: " + responsePayload.picture);
+            console.log("Email: " + responsePayload.email);
+
+            // obtenemos el TOKEN de GOOGLE
+            //var id_token = getAuthResponse().id_token;
+            //console.log(id_token);
+            var id_token = response.credential;
+            console.log(id_token);
+        }
+    </script>
+
+    <!--Creamos un Script para cerrar la sesión según doc de Integrating Google Sign In-->
+    <!--<a href="#" onclick="signOut();">Sign out</a>
+    <script>
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function() {
+                console.log('User signed out.');
+            });
+        }
+    </script>-->
+</body>
+
+</html>

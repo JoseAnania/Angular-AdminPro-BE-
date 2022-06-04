@@ -46,6 +46,14 @@ router.post('/', [
 // Ruta PUT para Modificar Hospitales (necesita el id)
 router.put('/:id', [
 
+        // Validamos que venga un token según nuestras validaciones personalizadas
+        validarJWT,
+
+        // validamos que el nombre no esté vacío
+        check('nombre', 'El nombre es obligatorio').notEmpty(),
+
+        // Validamos según nuestras validaciones personalizadas
+        validarCampos,
     ],
 
     actualizarHospital
@@ -54,6 +62,8 @@ router.put('/:id', [
 // Ruta DELETE para Borrar Hospitales (necesita el id)
 router.delete('/:id', [
 
+        // Validamos que venga un token según nuestras validaciones personalizadas
+        validarJWT,
     ],
 
     borrarHospital

@@ -7,13 +7,16 @@
 const { Router } = require('express');
 
 // Importamos los Controladores
-const { login, googleSignIn } = require('../controllers/auth');
+const { login, googleSignIn, renewToken } = require('../controllers/auth');
 
 // Importamos las Validaciones
 const { validarCampos } = require('../middlewares/validar-campos');
 
 // Importamos el Check Express Validator
 const { check } = require('express-validator');
+
+// Importamos las Validaciones desde los Middlewares
+const { validarJWT } = require('../middlewares/validar-jwt');
 
 // Construimos las Rutas
 const router = Router();
@@ -45,6 +48,16 @@ router.post('/google', [
     ],
 
     googleSignIn
+);
+
+// Ruta GET para renovar el Token (si alguien está en sesión activa)
+router.get('/renew', [
+
+        // Validamos que venga un token según nuestras validaciones personalizadas
+        validarJWT,
+    ],
+
+    renewToken
 );
 
 // Exportamos la Ruta

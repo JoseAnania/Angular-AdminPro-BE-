@@ -1,6 +1,7 @@
 // Archivo creado para manejar los Controladores de las Rutas de los Hospitales
 
 // Importamos el modelo
+const hospital = require("../models/hospital");
 const Hospital = require("../models/hospital");
 
 // Método GET
@@ -57,21 +58,98 @@ const crearHospital = async(req, res) => {
 // Método PUT
 const actualizarHospital = async(req, res) => {
 
-    // respuesta
-    res.json({
-        ok: true,
-        msg: 'actualizarHospital',
-    });
+    // obtenemos el id del hospital que viene del Front
+    const id = req.params.id;
+
+    // obtenemos el id del usuario que viene del Front
+    const uid = req.uid;
+
+    try {
+
+        // buscamos el Hospital por id
+        const hospitalDB = await Hospital.findById(id);
+
+        // si no encontramos hospital, mostramos error
+        if (!hospitalDB) {
+
+            // respuesta
+            return res.status(404).json({
+                ok: false,
+                msg: 'No existe un hospital con ese Id'
+            });
+        }
+
+        // si encontramos hospital
+        // obtenemos los campos que vienen del Front sin los campos que no permitimos actualizar
+        const cambiosHospital = {
+            ...req.body,
+            usuario: uid
+        }
+
+        // grabamos los cambios en la BD
+        const hospitalActualizado = await Hospital.findByIdAndUpdate(id, cambiosHospital, { new: true });
+
+        // respuesta
+        res.json({
+            ok: true,
+            hospital: hospitalActualizado,
+        });
+
+    } catch (error) {
+
+        // si existe un error imprimos en consola
+        console.log(error);
+
+        // respuesta
+        res.status(500).json({
+            ok: false,
+            msg: "Error Inesperado",
+        });
+    }
+
 };
 
 // Método DELETE
 const borrarHospital = async(req, res) => {
 
-    // respuesta
-    res.json({
-        ok: true,
-        msg: 'borrarHospital',
-    });
+    // obtenemos el id del hospital que viene del Front
+    const id = req.params.id;
+
+    try {
+
+        // buscamos el Hospital por id
+        const hospitalDB = await Hospital.findById(id);
+
+        // si no encontramos hospital, mostramos error
+        if (!hospitalDB) {
+
+            // respuesta
+            return res.status(404).json({
+                ok: false,
+                msg: 'No existe un hospital con ese Id'
+            });
+        }
+
+        // si existe, borramos en la BD
+        await Hospital.findByIdAndDelete(id);
+
+        // respuesta
+        res.json({
+            ok: true,
+            msg: 'Hospital eliminado'
+        });
+
+    } catch (error) {
+
+        // si existe un error imprimos en consola
+        console.log(error);
+
+        // respuesta
+        res.status(500).json({
+            ok: false,
+            msg: "Error Inesperado",
+        });
+    }
 };
 
 // Exportamos los métodos

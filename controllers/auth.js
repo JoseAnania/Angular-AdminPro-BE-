@@ -129,8 +129,26 @@ const googleSignIn = async(req, res) => {
 
 };
 
+// Método GET (mandamos el token viejo y recibimos uno nuevo para evitar el vencimiento)
+const renewToken = async(req, res) => {
+
+    // obtenemos el id que viene del Front
+    const uid = req.uid;
+
+
+    // Generamos un nuevo JWT (Jason Web Token) desde el Helpers
+    const token = await generarJWT(uid);
+
+    // respuesta
+    res.json({
+        ok: true,
+        token,
+    });
+}
+
 // Exportamos los métodos
 module.exports = {
     login,
-    googleSignIn
+    googleSignIn,
+    renewToken,
 };

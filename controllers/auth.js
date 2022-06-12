@@ -135,14 +135,17 @@ const renewToken = async(req, res) => {
     // obtenemos el id que viene del Front
     const uid = req.uid;
 
-
     // Generamos un nuevo JWT (Jason Web Token) desde el Helpers
     const token = await generarJWT(uid);
+
+    // obtenemos el usuario
+    const usuario = await Usuario.findById(uid);
 
     // respuesta
     res.json({
         ok: true,
         token,
+        usuario,
     });
 }
 

@@ -32,11 +32,7 @@ router.put('/:tabla/:id', [
 );
 
 // Ruta GET para Obtener Imágenes
-router.get('/:tabla/:foto', [
-
-        // Validamos que venga un token según nuestras validaciones personalizadas
-        validarJWT,
-    ],
+router.get('/:tabla/:foto', [],
 
     getImagen
 

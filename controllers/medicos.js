@@ -151,10 +151,45 @@ const borrarMedico = async(req, res) => {
     }
 };
 
+// Método GET
+const getMedicoById = async(req, res) => {
+
+    // obtenemos el id del médico que viene del Front
+    const id = req.params.id;
+
+    try {
+
+        // buscamos el Médico por Id de la BD (await porque es una Promesa y esperamos a que termine antes de ejecutar la res)
+        // en el populate mostramos los datos que queremos del usuario y hospital (no sólo su UID)
+        const medico = await Medico.findById(id)
+            .populate('usuario', 'nombre img')
+            .populate('hospital', 'nombre img');
+
+        // respuesta
+        res.json({
+            ok: true,
+            medico,
+        });
+
+    } catch (error) {
+
+        // si existe un error imprimos en consola
+        console.log(error);
+
+        // respuesta
+        res.status(500).json({
+            ok: false,
+            msg: "Error Inesperado",
+        });
+    }
+
+};
+
 // Exportamos los métodos
 module.exports = {
     getMedico,
     crearMedico,
     actualizarMedico,
     borrarMedico,
+    getMedicoById,
 };

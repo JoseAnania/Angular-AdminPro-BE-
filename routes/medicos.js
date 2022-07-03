@@ -10,7 +10,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 // Importamos los Controladores
-const { getMedico, crearMedico, actualizarMedico, borrarMedico } = require('../controllers/medicos');
+const { getMedico, crearMedico, actualizarMedico, borrarMedico, getMedicoById } = require('../controllers/medicos');
 
 // Importamos las Validaciones desde los Middlewares
 const { validarCampos } = require('../middlewares/validar-campos');
@@ -21,6 +21,9 @@ const router = Router();
 
 // Ruta GET para Obtener Médicos
 router.get('/', [
+
+        // Validamos que venga un token según nuestras validaciones personalizadas
+        validarJWT,
 
     ],
 
@@ -76,6 +79,17 @@ router.delete('/:id', [
     ],
 
     borrarMedico
+);
+
+// Ruta GET para Obtener un Médico (necesita el id)
+router.get('/:id', [
+
+        // Validamos que venga un token según nuestras validaciones personalizadas
+        validarJWT,
+
+    ],
+
+    getMedicoById
 );
 
 // Exportamos la Ruta

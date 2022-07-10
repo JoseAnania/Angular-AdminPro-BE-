@@ -14,7 +14,7 @@ const { getUsuario, crearUsuario, actualizarUsuario, borrarUsuario } = require('
 
 // Importamos las Validaciones desde los Middlewares
 const { validarCampos } = require('../middlewares/validar-campos');
-const { validarJWT } = require('../middlewares/validar-jwt');
+const { validarJWT, validarADMIN_ROLE, validarADMIN_ROLE_MismoUsuario } = require('../middlewares/validar-jwt');
 
 // Construimos las Rutas
 const router = Router();
@@ -65,6 +65,10 @@ router.put('/:id', [
 
         // Validamos que venga un token según nuestras validaciones personalizadas
         validarJWT,
+
+        // Validamos que el Usuario Logueado tenga Rol Admin para poder Modificar Usuarios 
+        //(si tiene Rol User solo permitimos que modifique su propio usuario)
+        validarADMIN_ROLE_MismoUsuario,
     ],
 
     actualizarUsuario
@@ -75,6 +79,9 @@ router.delete('/:id', [
 
         // Validamos que venga un token según nuestras validaciones personalizadas
         validarJWT,
+
+        // Validamos que el Usuario Logueado tenga Rol Admin para poder Eliminar Usuarios
+        validarADMIN_ROLE,
     ],
 
     borrarUsuario

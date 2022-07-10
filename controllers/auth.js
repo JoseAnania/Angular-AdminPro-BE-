@@ -11,6 +11,7 @@ const { generarJWT } = require('../helpers/jwt');
 
 // importamos la verificación del Token de Google del Helpers
 const { googleVerify } = require('../helpers/google-verify');
+const { getMenuLateral } = require('../helpers/menuLateral-frontend');
 
 // Método POST
 const login = async(req, res) => {
@@ -53,6 +54,7 @@ const login = async(req, res) => {
         res.json({
             ok: true,
             token,
+            menu: getMenuLateral(usuarioDB.role)
         });
 
     } catch (error) {
@@ -112,7 +114,8 @@ const googleSignIn = async(req, res) => {
         // respuesta
         res.json({
             ok: true,
-            token
+            token,
+            menu: getMenuLateral(usuario.role)
         });
 
     } catch (error) {
@@ -146,6 +149,7 @@ const renewToken = async(req, res) => {
         ok: true,
         token,
         usuario,
+        menu: getMenuLateral(usuario.role)
     });
 }
 
